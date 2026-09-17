@@ -7,11 +7,9 @@ public import PiBaseLean.Properties.P38.Defs
 
 namespace PiBase
 
-open Topology Filter Set Function TopologicalSpace
+open Set Function
 
 variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-
-section Meta
 
 theorem isInjPathConnectedSpace_of_injective_image {f : X → Y} (fc : Continuous f)
     {s : Set X} (fs : InjOn f s) (hs : IsInjPathConnected s) : IsInjPathConnected (f '' s) := by
@@ -36,8 +34,6 @@ theorem Homeomorph.injPathConnectedSpace [InjPathConnectedSpace X] (f : X ≃ₜ
 theorem WellDefined.injPathConnectedSpace : WellDefined InjPathConnectedSpace :=
   fun {_ _} _ _ h _ ↦ Homeomorph.injPathConnectedSpace h.some
 
-end Meta
-
 theorem isInjPathConnected_iff_injPathConnectedSpace (s : Set X) :
     IsInjPathConnected s ↔ InjPathConnectedSpace s := by
   refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
@@ -45,7 +41,7 @@ theorem isInjPathConnected_iff_injPathConnectedSpace (s : Set X) :
     intro x y xy _ _
     obtain ⟨p, pi, ps⟩ := h (Subtype.coe_ne_coe.mpr xy) x.mem y.mem
     have (r : unitInterval) : p r ∈ s := ps ⟨r, rfl⟩
-    let p' : Path x y :={
+    let p' : Path x y := {
       toFun := fun r ↦ ⟨p.toFun r, ps ⟨r, rfl⟩⟩
       continuous_toFun :=
         Continuous.subtype_mk p.continuous fun x_1 ↦ id (Eq.refl (p x_1)) ▸ ps ⟨x_1, rfl⟩
@@ -61,9 +57,14 @@ theorem isInjPathConnected_iff_injPathConnectedSpace (s : Set X) :
   · have : s = Subtype.val (p := s) '' univ := by
       rw [image_univ]
       ext x
-      simp only [Subtype.range_coe_subtype, mem_setOf_eq]
-      rfl
+      simp only [mem_range]
+      refine ⟨fun h ↦ ⟨⟨x, h⟩, ?_⟩, fun h ↦ ?_⟩
+      · simp
+      · obtain ⟨y, hy⟩ := h
+        rw [← hy]
+        simp
     rw [this]
+    let : TopologicalSpace (Subtype s) := by apply instTopologicalSpaceSubtype
     apply isInjPathConnectedSpace_of_injective_image
     · exact continuous_subtype_val
     · exact injOn_subtype_val

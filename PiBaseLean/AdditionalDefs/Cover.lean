@@ -1,16 +1,15 @@
 module
 
 public import Mathlib.Topology.Sets.OpenCover
-public import Mathlib.Data.Set.Card
-
-@[expose] public section
 
 /-! This file contains additional definitions and statements around covers of topological spaces
 which are useful for properties and theorems. -/
 
+@[expose] public section
+
 namespace PiBase
 
-open Function Set Topology TopologicalSpace
+open Set Topology TopologicalSpace
 
 variable {X ι : Type*}
 
@@ -29,8 +28,7 @@ def PointCountable (U : ι → Set X) :=
   ∀ x : X, { i | x ∈ U i }.Countable
 
 /-- Star of an open cover. -/
-def CoverStar (U : ι → Set X) (x : X) :
-    Set X := ⋃ i : ι, ⋃ (_ : x ∈ U i), U i
+def CoverStar (U : ι → Set X) (x : X) : Set X := ⋃ i : ι, ⋃ (_ : x ∈ U i), U i
 
 /-- A collection of sets is called *star finite*
 if each member of the collection only meets finitely many other member. -/
@@ -76,7 +74,7 @@ theorem LocallyFinite.locallyCountable {U : ι → Set X} (h : LocallyFinite U) 
 
 /-- A discrete family of sets. -/
 def IsDiscreteFamily (F : ι → Set X) : Prop :=
-  ∀ x : X, ∃ U ∈ 𝓝 x, {i : ι | (F i ∩ U).Nonempty}.encard ≤ 1
+  ∀ x : X, ∃ U ∈ 𝓝 x, {i : ι | (F i ∩ U).Nonempty}.Subsingleton
 
 /-- An omega cover of a space. -/
 def IsOmegaCover (f : ι → Opens X) : Prop :=
@@ -96,7 +94,7 @@ theorem StarFinite.locallyFinite {U : ι → Set X} (h : StarFinite U)
 
 --to mathlib
 theorem _root_.Set.Countable.diff {α : Type u} {s t : Set α} (hs : s.Countable) :
-    (s \ t).Countable := hs.mono diff_subset
+    (s \ t).Countable := hs.mono sdiff_subset
 
 /-- A locally countable collection of sets is point countable. -/
 theorem LocallyCountable.pointCountable {U : ι → Set X} (h : LocallyCountable U) :
@@ -110,7 +108,8 @@ def IsNetwork (f : ι → Set X) : Prop :=
 
 /-- A k-network of a topological space. -/
 def IsKNetwork (f : ι → Set X) : Prop :=
-  ∀ U K : Set X, IsOpen U → IsCompact K → K ⊆ U → ∃ s : Set ι, K ⊆ ⋃ i ∈ s, f i ∧ ⋃ i ∈ s, f i ⊆ U
+  ∀ U K : Set X, IsOpen U → IsCompact K → K ⊆ U → ∃ s : Finset ι,
+    K ⊆ ⋃ i ∈ s, f i ∧ ⋃ i ∈ s, f i ⊆ U
 
 /-- Every k-network is a network -/
 theorem IsKNetwork.isNetwork {f : ι → Set X} (h : IsKNetwork f) : IsNetwork f := by
@@ -128,5 +127,17 @@ theorem IsKNetwork.isNetwork {f : ι → Set X} (h : IsKNetwork f) : IsNetwork f
 /-- K-cover of a topological space -/
 def IsKCover (f : ι → Opens X) : Prop :=
   IsOpenCover f ∧ ⊤ ∉ range f ∧ ∀ ⦃K : Set X⦄, IsCompact K → ∃ i : ι, K ⊆ f i
+
+/-- Alternative def of K covers -/
+def IsKCover' (s : Set (Set X)) : Prop :=
+  (∀ i ∈ s, IsOpen i) ∧ (sUnion s = univ) ∧ univ ∉ s ∧ ∀ ⦃K : Set X⦄,
+    IsCompact K → ∃ i ∈ s, K ⊆ i
+
+/-- K-cover of a topological space -/
+def IsKCover'' (f : ι → Set X) : Prop :=
+  (∀ i : ι, IsOpen (f i)) ∧ (⋃ i : ι, f i = univ) ∧ univ ∉ range f ∧
+    ∀ ⦃K : Set X⦄, IsCompact K → ∃ i : ι, K ⊆ f i
+
+--TODO: we now have 3 defs for K covers, when we only need one...
 
 end PiBase

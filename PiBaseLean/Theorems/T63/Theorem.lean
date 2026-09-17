@@ -1,12 +1,12 @@
 module
 
-public import PiBaseLean.Properties.Bundled.Basic
-public import PiBaseLean.Properties.P42.Defs
-public import PiBaseLean.Properties.P43.Defs
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P42.Bundled
+public import PiBaseLean.Properties.P43.Bundled
 
 @[expose] public section
 
-open Topology Set Function
+open Topology Set
 
 namespace PiBase
 
@@ -14,11 +14,17 @@ namespace PiBase
 is locally path connected -/
 instance instLocallyPathConnectedSpaceOfLocallyInjPathConnectedSpace
     {X : Type*} [TopologicalSpace X] [h : LocallyInjPathConnectedSpace X] :
-    LocPathConnectedSpace X where
+    LocallyPathConnectedSpace X where
   path_connected_basis x := by
     apply Filter.hasBasis_self.mpr (fun t ht ↦ ?_)
-    obtain ⟨r, xr, hr, rt⟩ := (Filter.hasBasis_self).1 (h.inj_path_connected_basis x) t ht
-    use r, xr, hr.isPathConnected <| nonempty_of_mem <| mem_of_mem_nhds xr
+    have : (𝓝 x).HasBasis (fun s ↦ s ∈ 𝓝 x ∧ IsOpen s ∧ IsInjPathConnected s) id := by
+      convert h.inj_path_connected_basis x using 1
+      ext s
+      simp only [and_congr_left_iff, and_imp]
+      intro hs _
+      exact IsOpen.mem_nhds_iff hs
+    obtain ⟨r, xr, hr, rt⟩ := (Filter.hasBasis_self).1 this t ht
+    use r, xr, hr.2.isPathConnected <| nonempty_of_mem <| mem_of_mem_nhds xr
 
 end PiBase
 

@@ -1,19 +1,17 @@
 module
 
-public import PiBaseLean.Properties.Bundled.Basic
-public import PiBaseLean.Properties.P117.Defs
-public import PiBaseLean.Properties.P118.Defs
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P117.Bundled
+public import PiBaseLean.Properties.P118.Bundled
 
 @[expose] public section
 
 universe u
 
-open Topology Set Function
-
 namespace PiBase
 
 /-- Theorem T34: P118 (HasSigmaLocallyFiniteKNetwork) => P117 (HasSigmaLocallyFiniteNetwork) -/
-instance instHasSigmaLocallyFiniteNetworkOfHasSigmaLocallyFiniteKNetwork (X : Type u)
+instance instHasSigmaLocallyFiniteNetworkOfHasSigmaLocallyFiniteKNetwork {X : Type u}
     [TopologicalSpace X] [h : HasSigmaLocallyFiniteKNetwork X] :
     HasSigmaLocallyFiniteNetwork X where
   ex_network :=
@@ -24,6 +22,7 @@ end PiBase
 
 namespace PiBase.Formal
 
-theorem T34 : P118 ≤ P117 := fun X _ ↦ @instHasSigmaLocallyFiniteNetworkOfHasSigmaLocallyFiniteKNetwork X _
+theorem T34 : P118 ≤ P117 :=
+  fun X _ ↦ @instHasSigmaLocallyFiniteNetworkOfHasSigmaLocallyFiniteKNetwork X _
 
 end PiBase.Formal

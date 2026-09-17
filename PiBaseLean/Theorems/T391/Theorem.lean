@@ -1,21 +1,18 @@
 module
 
-public import PiBaseLean.Properties.Bundled.Basic
-public import PiBaseLean.Properties.P58.Defs
-public import PiBaseLean.Properties.P65.Defs
-public import PiBaseLean.Properties.P163.Defs
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P163.Bundled
+public import PiBaseLean.Properties.P58.Bundled
+public import PiBaseLean.Properties.P65.Bundled
 
 @[expose] public section
 
 universe u
 
-open Cardinal PiBase.Formal
-
 namespace PiBase
 
---TODO: Maybe redo this once negations are properly implemented
 /-- Theorem 391: |X| ≤ 𝔠 and ¬ |X| < 𝔠  implies |X| = 𝔠 -/
-instance instCardEqContinuumOfCardLeContinuumOfNotCardltContinuum (X : Type u)
+theorem instCardEqContinuumOfCardLeContinuumOfNotCardltContinuum {X : Type u}
     [h : CardLeContinuum X] (h' : ¬CardLtContinuum X) : CardEqContinuum X where
   card_eq := by
     refine le_antisymm h.card_le ?_
