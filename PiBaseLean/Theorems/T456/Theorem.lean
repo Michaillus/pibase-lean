@@ -1,9 +1,9 @@
 module
 
-public import PiBaseLean.Properties.Bundled.Basic
-public import PiBaseLean.Properties.P57.Defs
-public import PiBaseLean.Properties.P78.Defs
-public import PiBaseLean.Properties.P181.Defs
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P181.Bundled
+public import PiBaseLean.Properties.P57.Bundled
+public import PiBaseLean.Properties.P78.Bundled
 
 @[expose] public section
 
@@ -11,7 +11,6 @@ universe u
 
 namespace PiBase
 
---TODO: When negations of properties are properly implemented, maybe redo this
 /-- Theorem 456: a countably infinite space is infinite -/
 instance instCountablyInfiniteOfCountableOfInfinite {X : Type u} [Countable X] [Infinite X] :
     CountablyInfinite X := by tauto

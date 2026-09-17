@@ -1,23 +1,22 @@
 module
 
-public import PiBaseLean.Properties.Bundled.Basic
-public import Mathlib.Topology.Homeomorph.Lemmas
-public import PiBaseLean.Properties.P133.Defs
-public import PiBaseLean.Properties.P154.Defs
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P133.Bundled
+public import PiBaseLean.Properties.P154.Bundled
 
 @[expose] public section
 
 universe u
 
-open Topology Set Function
+open Topology
 
 namespace PiBase
 
 /-- Theorem T66: P133 (Lots) => P154 (GoSpace) -/
-instance instGoSpaceOfLots (X : Type u)
+instance instGoSpaceOfLots {X : Type u}
     [τ : TopologicalSpace X] [h : Lots X] :
     GoSpace X where
-  subset_lots := ⟨X, univ, τ, h, Nonempty.intro (Homeomorph.Set.univ X).symm⟩
+  subset_lots := ⟨X, id, τ, h, IsEmbedding.id⟩
 
 end PiBase
 

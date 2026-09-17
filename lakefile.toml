@@ -7,10 +7,12 @@ defaultTargets = ["PiBaseLean"]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
+linter.style.header = false
 maxSynthPendingDepth = 3
 
 [[require]]
 name = "mathlib"
+rev = "v4.33.0-rc2"
 scope = "leanprover-community"
 
 [[lean_lib]]

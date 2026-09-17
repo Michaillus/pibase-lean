@@ -1,20 +1,18 @@
 module
 
-public import PiBaseLean.Properties.Bundled.Basic
-public import PiBaseLean.Properties.P36.Defs
-public import PiBaseLean.Properties.P129.Defs
-public import PiBaseLean.Properties.P185.Lemmas
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P129.Bundled
+public import PiBaseLean.Properties.P185.Bundled
+public import PiBaseLean.Properties.P36.Bundled
 
 @[expose] public section
 
 universe u
 
-open Topology Set Function
-
 namespace PiBase
 
 /-- Theorem T468: P185 (PartitionTopology) + P36 (PreconnectedSpace) => P129 (IndiscreteTopology) -/
-instance instIndiscreteTopologyOfPartitionTopologyOfPreconnectedSpace (X : Type u)
+instance instIndiscreteTopologyOfPartitionTopologyOfPreconnectedSpace {X : Type u}
     [TopologicalSpace X] [h : PartitionTopology X] [h' : PreconnectedSpace X] :
     IndiscreteTopology X := by
   refine IndiscreteTopology.of_forall_inseparable (fun x y ↦ ?_)
@@ -30,6 +28,7 @@ end PiBase
 
 namespace PiBase.Formal
 
-theorem T468 : P185 ⊓ P36 ≤ P129 := fun X _ ⟨h1, h2⟩ ↦ @instIndiscreteTopologyOfPartitionTopologyOfPreconnectedSpace X _ h1 h2
+theorem T468 : P185 ⊓ P36 ≤ P129 :=
+  fun X _ ⟨h1, h2⟩ ↦ @instIndiscreteTopologyOfPartitionTopologyOfPreconnectedSpace X _ h1 h2
 
 end PiBase.Formal

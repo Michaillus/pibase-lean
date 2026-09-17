@@ -1,0 +1,17 @@
+module
+
+public import PiBaseLean.Properties.P187.Defs
+public import PiBaseLean.Properties.P87.Defs
+
+@[expose] public section
+
+universe u
+
+namespace PiBase
+
+/- 186. Embeds in a topological W-group -/
+class EmbedsInTopologicalWGroupSpace (X : Type u) [TopologicalSpace X] : Prop where
+  embeds_in_topological_w_group : ∃ (Y : Type u) (_ : TopologicalSpace Y) (f : X → Y),
+    WSpace Y ∧ HasGroupTopology Y ∧ Topology.IsEmbedding f
+
+end PiBase

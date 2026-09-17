@@ -1,16 +1,15 @@
 module
 
-public import Mathlib.Data.Fintype.EquivFin
-public import PiBaseLean.Properties.Bundled.Basic
-public import PiBaseLean.Properties.P78.Defs
-public import PiBaseLean.Properties.P125.Defs
+public import PiBaseLean.Bundled.Basic
+public import PiBaseLean.Properties.P125.Bundled
+public import PiBaseLean.Properties.P78.Bundled
 
 @[expose] public section
 
 namespace PiBase
 
---TODO: When negations of properties are properly implemented, maybe redo this
 /- Theorem 250: an infinite space has multiple points  -/
+#guard_msgs (drop info) in
 #check Infinite.instNontrivial
 
 end PiBase
