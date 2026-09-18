@@ -3,7 +3,7 @@ module
 public import Mathlib
 public import Mathlib.SetTheory.Cardinal.Defs
 public import Mathlib.Topology.Constructions
-public import PiBaseLean.Properties.Bundled.Basic
+public import PiBaseLean.Bundled.Basic
 public import PiBaseLean.Properties.P203.Defs
 public import PiBaseLean.Properties.P219.Defs
 public import PiBaseLean.Properties.P78.Defs
