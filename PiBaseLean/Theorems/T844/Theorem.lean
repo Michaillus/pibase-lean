@@ -19,18 +19,15 @@ namespace PiBase
 /-- Theorem T844: P219 (TorontoSpace) ∧ P203 (AlmostDiscreteSpace) => P78 (Finite) -/
 theorem instFiniteOfTorontoSpaceAndAlmostDiscreteSpace (X : Type u)
     [TopologicalSpace X] [h1 : TorontoSpace X] [h2 : AlmostDiscreteSpace X] : Finite X := by
-  by_contra h
-  rw [not_finite_iff_infinite] at h
+  by_contra! h
   obtain ⟨p, hp⟩ := h2.ex_point
-  /- have h3 : #X = #(X \ {p}) := by sorry -/
-  have h3 : #{ x : X // x ≠ p } = #X  := by
-    /- rw [← mk_add_one_eq] -/
-    sorry
-  have h4 := h1.toronto h3
+  have h3 : #(Set.univ \ {p} : Set X) = #X  := by
+    have h_Xinf := @Set.infinite_univ X h
+    have h_pfin : Set.Finite {p} := finite_singleton p
+    simp [Cardinal.mk_sdiff_eq_left_of_finite h_Xinf h_pfin, mk_univ]
+  have ⟨f⟩ := h1.toronto h3
   have h5 : DiscreteTopology { x : X // x ≠ p } := by
     sorry
-  obtain ⟨f⟩ := h4
-  simp at f h5
   have h6 := @Homeomorph.discreteTopology _ _ _ _ h5 f
   have hx_open := isOpen_discrete {p}
   have h7 := (hp p).mpr hx_open
