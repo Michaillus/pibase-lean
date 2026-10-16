@@ -19,15 +19,26 @@ namespace PiBase
 /-- Theorem T844: P219 (TorontoSpace) ∧ P203 (AlmostDiscreteSpace) => P78 (Finite) -/
 theorem instFiniteOfTorontoSpaceAndAlmostDiscreteSpace (X : Type u)
     [TopologicalSpace X] [h1 : TorontoSpace X] [h2 : AlmostDiscreteSpace X] : Finite X := by
-  by_contra! h
+  by_contra! h3
   obtain ⟨p, hp⟩ := h2.ex_point
-  have h3 : #(Set.univ \ {p} : Set X) = #X  := by
-    have h_Xinf := @Set.infinite_univ X h
+  have h_card : #{ x : X // x ≠ p } = #X  := by
+    have h : #{ x : X // x ≠ p } = #(Set.univ \ {p} : Set X) := by
+      congr
+      simp
+    rw [h]
+    have h_Xinf := @Set.infinite_univ X h3
     have h_pfin : Set.Finite {p} := finite_singleton p
     simp [Cardinal.mk_sdiff_eq_left_of_finite h_Xinf h_pfin, mk_univ]
-  have ⟨f⟩ := h1.toronto h3
+  have ⟨f⟩ := h1.toronto h_card
   have h5 : DiscreteTopology { x : X // x ≠ p } := by
-    sorry
+    rw [discreteTopology_iff_isOpen_singleton]
+    choose a
+    rw [isOpen_induced_iff]
+    use {a.val}
+    constructor
+    · exact (hp a.val).mp a.property
+    · rw [← Set.image_singleton]
+      exact Subtype.val_injective.preimage_image ({a} : Set {x // x ≠ p})
   have h6 := @Homeomorph.discreteTopology _ _ _ _ h5 f
   have hx_open := isOpen_discrete {p}
   have h7 := (hp p).mpr hx_open
