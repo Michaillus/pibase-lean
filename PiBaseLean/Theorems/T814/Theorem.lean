@@ -2,21 +2,14 @@ module
 
 public import Mathlib
 public import PiBaseLean.Bundled.Basic
-public import PiBaseLean.Properties.P129.Defs
-public import PiBaseLean.Properties.P219.Defs
+public import PiBaseLean.Properties.P129.Bundled
+public import PiBaseLean.Properties.P219.Bundled
 
 @[expose] public section
 
 universe u
 
 namespace PiBase
-
-instance {p : X → Prop} [TopologicalSpace X] [IndiscreteTopology X] :
-    IndiscreteTopology (Subtype p) := by
-  refine ⟨top_unique fun s h ↦ ?_⟩
-  have ⟨t, ht1, ht2⟩ := isOpen_induced_iff.mp h
-  rcases (IndiscreteTopology.isOpen_iff t).mp ht1
-  <;> simp_all [Eq.comm]
 
 /-- Theorem T814: P129 (IndiscreteTopology) => P219 (TorontoSpace) -/
 theorem instTorontoSpaceOfIndiscreteTopology (X : Type u)
